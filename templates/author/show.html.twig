@@ -1,0 +1,32 @@
+{# templates/author/show.html.twig — provided template for the author detail page #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ author.name }} - Community Library{% endblock %}
+
+{% block body %}
+    <article class="author-detail">
+        <h1>{{ author.name }}</h1>
+
+        {% if author.biography %}
+            <p class="biography">{{ author.biography|nl2br }}</p>
+        {% endif %}
+
+        <h2>Books ({{ author.books|length }})</h2>
+        {% if author.books is empty %}
+            <p>No books yet.</p>
+        {% else %}
+            <ul>
+                {% for book in author.books %}
+                    <li>
+                        {{ book.title }}
+                        {% if book.publicationDate %}
+                            <span class="year">({{ book.publicationDate|date('Y') }})</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <p><a href="{{ path('app_author_index') }}">← Back to all authors</a></p>
+    </article>
+{% endblock %}

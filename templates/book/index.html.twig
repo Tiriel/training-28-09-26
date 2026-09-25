@@ -1,0 +1,28 @@
+{# templates/book/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Books - Community Library{% endblock %}
+
+{% block body %}
+    <h1>Our collection ({{ books|length }} books)</h1>
+
+    <div class="book-grid">
+        {% for book in books %}
+            <div class="book-card">
+                <h2>
+                    <a href="{{ path('app_book_show', {id: book.id}) }}">
+                        {{ book.title }}
+                    </a>
+                </h2>
+                <p>
+                    {{ book.authors|map(a => a.name)|join(', ') }}
+                    &mdash; {{ book.publicationDate|date('Y') }}
+                </p>
+                {# Le lien Edit mis à jour avec les classes CSS #}
+                <a href="{{ path('app_admin_book_edit', {id: book.id}) }}" class="btn btn-outline-secondary">
+                    Edit
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{# templates/book/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ book.title }} - Community Library{% endblock %}
+
+{% block body %}
+    <h1>{{ book.title }}</h1>
+
+    <div class="book-meta">
+        <span>{{ book.authors|map(a => a.name)|join(', ') }}</span>
+        {% if book.publicationDate %}<span>{{ book.publicationDate|date('Y') }}</span>{% endif %}
+        {% for genre in book.genres %}
+            <span class="genre-badge">{{ genre.name|upper }}</span>
+        {% endfor %}
+    </div>
+
+    {% if book.coverUrl %}<img src="{{ book.coverUrl }}" alt="{{ book.title }}">{% endif %}
+
+    <hr>
+
+    <p>{{ book.summary }}</p>
+
+    <a href="{{ path('app_book_index') }}" class="btn btn-outline-secondary">← Back to all books</a>
+    <a href="{{ path('app_admin_book_edit', {id: book.id}) }}" class="btn">Edit</a>
+{% endblock %}

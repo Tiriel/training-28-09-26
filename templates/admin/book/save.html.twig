@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création / Édition - Community Library{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.isbn) }}
+    {{ form_row(form.summary) }}
+    {{ form_row(form.publicationDate) }}
+    {{ form_row(form.available) }}
+    {{ form_row(form.language) }}
+    {{ form_row(form.coverUrl) }}
+    {{ form_row(form.authors) }}
+    {{ form_row(form.genres) }}
+    <button type="submit" class="btn">Save</button>
+    {{ form_end(form) }}
+{% endblock %}
