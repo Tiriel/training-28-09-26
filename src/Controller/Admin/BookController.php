@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Book;
 use App\Form\BookType;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class BookController extends AbstractController
 {
+    #[Route('/admin/books', name: 'admin_book_index', methods: ['GET'])]
+    public function index(BookRepository $repository): Response
+    {
+        return $this->render('admin/book/index.html.twig', [
+            'books' => $repository->findAll(),
+        ]);
+    }
+
     #[Route('/admin/books/new', name: 'app_admin_book_new')]
     #[Route('/admin/books/{id}/edit', name: 'app_admin_book_edit')]
     public function save(

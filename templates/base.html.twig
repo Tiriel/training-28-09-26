@@ -22,6 +22,14 @@
             <a href="{{ path('app_main_about') }}">About</a>
             <a href="{{ path('app_book_index') }}">Books</a>
             <a href="{{ path('app_main_contact') }}">Contact</a>
+            <div class="user-menu">
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Login</a>
+                    <a href="{{ path('app_register') }}">Register</a>
+                {% endif %}
+            </div>
         </nav>
     </header>
     <main>

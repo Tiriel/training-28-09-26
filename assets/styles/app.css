@@ -158,6 +158,7 @@ form input[type="url"],
 form input[type="email"],
 form input[type="date"],
 form input[type="number"],
+form input[type="password"],
 form textarea,
 form select {
     width: 100%;
@@ -263,4 +264,112 @@ form select.is-invalid {
     background-color: #d1ecf1;
     color: #0c5460;
     border-color: #bee5eb;
+}
+
+/* Auth pages — login & registration card */
+.auth-card {
+    max-width: 420px;
+    margin: 3rem auto;
+    padding: 2rem 2.25rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.auth-card h1 {
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #111;
+}
+
+.auth-card form {
+    margin: 0;
+}
+
+.auth-card .auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.auth-card .auth-footer a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.auth-card .auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Admin pages — listing & header */
+.admin-page {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.admin-page .admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.admin-page .admin-header h1 {
+    margin: 0;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.admin-table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table-actions {
+    text-align: right;
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* Header — auth-aware nav (extends the dark header from ch02) */
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+header nav .user-menu {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+header nav .user-menu .user-email {
+    color: #d1d5db;
+    font-style: italic;
 }

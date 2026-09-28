@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage books — Community Library{% endblock %}
+
+{% block body %}
+    <div class="admin-page">
+        <header class="admin-header">
+            <h1>Manage books</h1>
+            <a href="{{ path('app_admin_book_new') }}" class="btn">+ New book</a>
+        </header>
+
+        <table class="admin-table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th class="admin-table-actions"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.authors|map(a => a.name)|join(', ') }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td class="admin-table-actions">
+                        <a href="{{ path('app_admin_book_edit', {id: book.id}) }}"
+                           class="btn btn-outline-secondary">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
