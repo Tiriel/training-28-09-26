@@ -10,10 +10,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted("ROLE_ADMIN")]
 class BookController extends AbstractController
 {
-    #[Route('/admin/books', name: 'admin_book_index', methods: ['GET'])]
+    #[Route('/admin/books', name: 'app_admin_book_index', methods: ['GET'])]
     public function index(BookRepository $repository): Response
     {
         return $this->render('admin/book/index.html.twig', [

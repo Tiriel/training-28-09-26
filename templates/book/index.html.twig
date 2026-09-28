@@ -6,23 +6,74 @@
 {% block body %}
     <h1>Our collection ({{ books|length }} books)</h1>
 
-    <div class="book-grid">
-        {% for book in books %}
-            <div class="book-card">
-                <h2>
-                    <a href="{{ path('app_book_show', {id: book.id}) }}">
-                        {{ book.title }}
-                    </a>
-                </h2>
-                <p>
-                    {{ book.authors|map(a => a.name)|join(', ') }}
-                    &mdash; {{ book.publicationDate|date('Y') }}
-                </p>
-                {# Le lien Edit mis à jour avec les classes CSS #}
-                <a href="{{ path('app_admin_book_edit', {id: book.id}) }}" class="btn btn-outline-secondary">
-                    Edit
-                </a>
-            </div>
-        {% endfor %}
-    </div>
+<div class="listing-layout">
+    <aside class="listing-sidebar">
+        <h2>Filter</h2>
+        <form method="get">
+            <input type="search" name="q" value="{{ criteria.q }}" placeholder="Title…">
+            <input type="text"   name="author" value="{{ criteria.author }}" placeholder="Author…">
+            <select name="genre">
+                <option value="">All genres</option>
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}" {{ criteria.genre == genre.id ? 'selected' }}>{{ genre.name }}</option>
+                {% endfor %}
+            </select>
+            <label><input type="checkbox" name="available" value="1" {{ criteria.available ? 'checked' }}> Only available</label>
+            <button>Search</button>
+        </form>
+    </aside>
+
+    <section class="listing-main">
+        <div class="sort-bar">
+            Sort by:
+            {% set isActive = criteria.sort.value == 'title' %}
+            {% set nextDir  = isActive and criteria.direction == 'asc' ? 'desc' : 'asc' %}
+            <a href="{{ path('app_book_index', app.request.query.all|merge({sort: 'title', direction: nextDir})) }}">
+                Title{% if isActive %} {{ criteria.direction == 'asc' ? '↑' : '↓' }}{% endif %}
+            </a>
+            {% set isActive = criteria.sort.value == 'author' %}
+            {% set nextDir  = isActive and criteria.direction == 'asc' ? 'desc' : 'asc' %}
+            <a href="{{ path('app_book_index', app.request.query.all|merge({sort: 'author', direction: nextDir})) }}">
+                Author{% if isActive %} {{ criteria.direction == 'asc' ? '↑' : '↓' }}{% endif %}
+            </a>
+            {% set isActive = criteria.sort.value == 'publicationDate' %}
+            {% set nextDir  = isActive and criteria.direction == 'asc' ? 'desc' : 'asc' %}
+            <a href="{{ path('app_book_index', app.request.query.all|merge({sort: 'publicationDate', direction: nextDir})) }}">
+                Publication date{% if isActive %} {{ criteria.direction == 'asc' ? '↑' : '↓' }}{% endif %}
+            </a>
+        </div>
+        <div class="book-grid">
+            {% for book in books %}
+                <div class="book-card">
+                    <h2>
+                        <a href="{{ path('app_book_show', {id: book.id}) }}">
+                            {{ book.title }}
+                        </a>
+                    </h2>
+                    <p>
+                        {{ book.authors|map(a => a.name)|join(', ') }}
+                        &mdash; {{ book.publicationDate|date('Y') }}
+                    </p>
+                    {# Le lien Edit mis à jour avec les classes CSS #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_admin_book_edit', {id: book.id}) }}" class="btn btn-outline-secondary">
+                            Edit
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <nav class="pagination">
+                {% if page > 1 %}
+                    <a href="{{ path('app_book_index', app.request.query.all|merge({page: page - 1})) }}">← Prev</a>
+                {% endif %}
+
+                <span>Page {{ page }} of {{ lastPage }}</span>
+
+                {% if page < lastPage %}
+                    <a href="{{ path('app_book_index', app.request.query.all|merge({page: page + 1})) }}">Next →</a>
+                {% endif %}
+            </nav>
+        </div>
+    </section>
+</div>
 {% endblock %}
