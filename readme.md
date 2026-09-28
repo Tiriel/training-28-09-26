@@ -20,7 +20,7 @@ Une application web de gestion de bibliothèque communautaire développée avec 
 
 1. **Cloner le dépôt :**
    ```bash
-   git clone https://github.com/samanheeralall/sf8pack.14.09.2026.git
+   git clone https://github.com/Tiriel/training-28-09-26
    cd community-library
    ```
 
@@ -39,7 +39,7 @@ Une application web de gestion de bibliothèque communautaire développée avec 
 4. **Charger le catalogue de base (Fixtures) :**
    Pour générer des fausses données (livres, auteurs, genres) afin de tester l'application :
    ```bash
-   php bin/console doctrine:fixtures:load
+   php bin/console foundry:load-fixtures
    ```
 
 5. **Lancer le serveur de développement :**
