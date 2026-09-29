@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Genre;
+use App\Security\Permission\BookPermission;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -15,9 +16,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class BookType extends AbstractType
 {
+    public function __construct(
+        private readonly AuthorizationCheckerInterface $checker
+    ) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -29,7 +35,6 @@ class BookType extends AbstractType
                 'input' => 'datetime_immutable',
                 'required' => false,
             ])
-            ->add('available', CheckboxType::class, ['required' => false])
             ->add('language', LanguageType::class, [
                 'required' => false,
                 'preferred_choices' => ['en', 'fr', 'de', 'es'],
@@ -46,12 +51,16 @@ class BookType extends AbstractType
                 'multiple' => true,
             ])
         ;
+        if ($options['book'] && $this->checker->isGranted(BookPermission::CHANGE_AVAILABILITY, $options['book'])) {
+            $builder->add('available', CheckboxType::class, ['required' => false]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Book::class,
+            'book' => ['null', Book::class],
         ]);
     }
 }

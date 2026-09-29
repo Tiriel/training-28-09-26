@@ -8,7 +8,9 @@
     {{ form_row(form.isbn) }}
     {{ form_row(form.summary) }}
     {{ form_row(form.publicationDate) }}
-    {{ form_row(form.available) }}
+    {% if is_granted('book.change_availability', book) %}
+        {{ form_row(form.available) }}
+    {% endif %}
     {{ form_row(form.language) }}
     {{ form_row(form.coverUrl) }}
     {{ form_row(form.authors) }}

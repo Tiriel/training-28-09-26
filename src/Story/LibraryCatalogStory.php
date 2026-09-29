@@ -27,17 +27,17 @@ final class LibraryCatalogStory extends Story
             'email' => 'webmaster@library.local',
             'roles' => ['ROLE_WEBMASTER'],
         ]);
-        UserFactory::createOne([
+        $librarian = UserFactory::createOne([
             'email' => 'librarian@library.local',
             'roles' => ['ROLE_LIBRARIAN'],
         ]);
-        UserFactory::createOne([
+        $reader = UserFactory::createOne([
             'email' => 'reader@test.local',
         ]);
 
         $books = require dirname(__DIR__, 2) . '/fixtures/book_fixtures.php';
 
-        BookFactory::createMany(\count($books), static function (int $i) use ($books): array {
+        BookFactory::createMany(\count($books), static function (int $i) use ($books, $reader, $librarian): array {
             $book = $books[$i - 1];
 
             return [
@@ -49,7 +49,8 @@ final class LibraryCatalogStory extends Story
                 'genres'          => array_map(
                     static fn (string $name) => GenreFactory::findOrCreate(['name' => $name]),
                     $book['genres'],
-                )
+                ),
+                'addedBy' => $i % 3 === 0 ? $reader : $librarian,
             ];
         });
     }

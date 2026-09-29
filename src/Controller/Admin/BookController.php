@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Book;
 use App\Form\BookType;
 use App\Repository\BookRepository;
+use App\Security\Permission\BookPermission;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,9 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted("ROLE_LIBRARIAN")]
 class BookController extends AbstractController
 {
+    #[IsGranted("ROLE_LIBRARIAN")]
     #[Route('/admin/books', name: 'app_admin_book_index', methods: ['GET'])]
     public function index(BookRepository $repository): Response
     {
@@ -30,10 +31,15 @@ class BookController extends AbstractController
         EntityManagerInterface $em,
         ?Book $book = null
     ): Response {
-        $isNew = $book === null;
+        $isNew = null === $book;
+
+        $isNew
+            ? $this->denyAccessUnlessGranted('ROLE_LIBRARIAN')
+            : $this->denyAccessUnlessGranted(BookPermission::EDIT_DETAILS, $book);
+
         $book ??= new Book();
 
-        $form = $this->createForm(BookType::class, $book);
+        $form = $this->createForm(BookType::class, $book, ['book' => $book]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -47,6 +53,7 @@ class BookController extends AbstractController
 
         return $this->render('admin/book/save.html.twig', [
             'form' => $form,
+            'book' => $book,
         ]);
     }
 }
