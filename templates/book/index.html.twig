@@ -46,7 +46,7 @@
             {% for book in books %}
                 <div class="book-card">
                     <h2>
-                        <a href="{{ path('app_book_show', {id: book.id}) }}">
+                        <a href="{{ path('app_book_show', {slug: book.slug}) }}">
                             {{ book.title }}
                         </a>
                     </h2>

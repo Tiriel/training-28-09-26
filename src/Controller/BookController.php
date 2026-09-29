@@ -37,16 +37,9 @@ class BookController extends AbstractController
         ]);
     }
 
-    #[Route(
-        '/books/{id}',
-        name: 'app_book_show',
-        requirements: ['id' => Requirement::DIGITS],
-        methods: ['GET']
-    )]
+    #[Route('/book/{slug:book}', name: 'app_book_show', methods: ['GET'])]
     public function show(Book $book): Response
     {
-        return $this->render('book/show.html.twig', [
-            'book' => $book,
-        ]);
+        return $this->render('book/show.html.twig', ['book' => $book]);
     }
 }

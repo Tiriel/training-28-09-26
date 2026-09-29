@@ -57,6 +57,9 @@ class Book
     #[ORM\ManyToOne]
     private ?User $addedBy = null;
 
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
@@ -208,6 +211,18 @@ class Book
     public function setAddedBy(?User $addedBy): static
     {
         $this->addedBy = $addedBy;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }
