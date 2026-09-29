@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My loans — Community Library{% endblock %}
+
+{% block body %}
+    <div class="loans-page">
+        <h1>My loans</h1>
+
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if loans is empty %}
+            <p>You have no active loans.</p>
+        {% else %}
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Loan date</th>
+                    <th>Due date</th>
+                    <th>Status</th>
+                    <th class="admin-table-actions"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for loan in loans %}
+                    <tr>
+                        <td>{{ loan.book.title }}</td>
+                        <td>{{ loan.loanDate|date('Y-m-d') }}</td>
+                        <td>{{ loan.dueDate|date('Y-m-d') }}</td>
+                        <td>{{ loan.status.value }}</td>
+                        <td class="admin-table-actions">
+                            {% if loan.returnDate is null %}
+                                <form method="POST" action="{{ path('app_loan_return', {id: loan.id}) }}">
+                                    <button type="submit" class="btn btn-outline-secondary">Return</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -17,6 +17,16 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        # DO NOT DO THIS IN PRODUCTION
+        app_backdoor_user:
+            memory:
+                users:
+                    admin@admin.com:
+                        password: '%env(string:ADMIN_PWD)%'
+                        roles: [ROLE_ADMIN, ROLE_USER]
+        app_all_users:
+            chain:
+                providers: [app_backdoor_user, app_user_provider]
 
     firewalls:
         dev:
@@ -25,7 +35,7 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            provider: app_all_users
             form_login:
                 login_path: app_login
                 check_path: app_login

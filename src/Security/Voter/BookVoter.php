@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Book;
 use App\Entity\User;
+use App\Repository\LoanRepository;
 use App\Security\Permission\BookPermission;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -12,7 +13,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class BookVoter extends Voter
 {
-    public function __construct(private AuthorizationCheckerInterface $checker) {}
+    public function __construct(
+        private readonly AuthorizationCheckerInterface $checker,
+        private readonly LoanRepository $loanRepository,
+    ) {}
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -28,10 +32,11 @@ final class BookVoter extends Voter
         }
 
         return match ($attribute) {
-            BookPermission::EDIT_DETAILS =>
+            BookPermission::EDIT_DETAILS        =>
                 $this->checker->isGranted('ROLE_LIBRARIAN') || $subject->getAddedBy() === $user,
             BookPermission::CHANGE_AVAILABILITY =>
-                $this->checker->isGranted('ROLE_LIBRARIAN'),
+                $this->checker->isGranted('ROLE_LIBRARIAN')
+                && !$this->loanRepository->hasActiveLoanForBook($subject),    // ← new
             default => false,
         };
     }

@@ -19,6 +19,11 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
+    public function findBySlugAndPublicationDate(): ?Book
+    {
+
+    }
+
     public function search(
         BookSearchCriteria $criteria,
         int $page = 1,

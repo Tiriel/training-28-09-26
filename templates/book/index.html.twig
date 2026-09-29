@@ -60,6 +60,14 @@
                             Edit
                         </a>
                     {% endif %}
+
+                    {% if book.available %}
+                        <form method="POST" action="{{ path('app_loan_new', {id: book.id}) }}">
+                            <button type="submit" class="btn">Borrow</button>
+                        </form>
+                    {% else %}
+                        <span class="muted">Currently on loan</span>
+                    {% endif %}
                 </div>
             {% endfor %}
             <nav class="pagination">
