@@ -20,6 +20,18 @@ final class LibraryCatalogStory extends Story
             'roles' => ['ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH'],
         ]);
         UserFactory::createOne([
+            'email' => 'manager@library.local',
+            'roles' => ['ROLE_MANAGER'],
+        ]);
+        UserFactory::createOne([
+            'email' => 'webmaster@library.local',
+            'roles' => ['ROLE_WEBMASTER'],
+        ]);
+        UserFactory::createOne([
+            'email' => 'librarian@library.local',
+            'roles' => ['ROLE_LIBRARIAN'],
+        ]);
+        UserFactory::createOne([
             'email' => 'reader@test.local',
         ]);
 
